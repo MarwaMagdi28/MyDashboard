@@ -35,6 +35,9 @@ resource "aws_instance" "ec2_instance" {
             sudo systemctl enable docker
             sudo docker run -d --name prometheus -p 9090:9090 prom/prometheus
             sudo docker run -d --name grafana -p 3000:3000 grafana/grafana
+            # Create the hosts file
+            echo "${self.public_ip} ec2_instance" >> /etc/hosts
+            systemctl restart sshd
             EOF
 
     provisioner "local-exec" {
