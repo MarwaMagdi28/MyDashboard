@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_instance" "ubuntu" {
-  ami           = "ami-005fc0f236362e99f" # Ubuntu 18.04 AMI
+  ami           = "ami-047d7c33f6e7b4bc4" # Ubuntu 18.04 AMI
   instance_type = "t2.micro"
 
   tags = {
