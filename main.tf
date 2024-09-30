@@ -19,7 +19,8 @@ resource "aws_instance" "ubuntu" {
   ami           = "ami-047d7c33f6e7b4bc4" # Ubuntu 18.04 AMI
   instance_type = "t2.micro"
   key_name      = aws_key_pair.monitoring.key_name
-
+  associate_public_ip_address = true
+  
   tags = {
     Name = "ubuntu"
   }
