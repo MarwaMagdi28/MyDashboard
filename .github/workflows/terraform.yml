@@ -28,7 +28,8 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     
     - name: Run Script
-      run:  chmod +x script.sh
+      run:  |
+            chmod +x script.sh
             ./script.sh
 
     - name: Install Ansible
