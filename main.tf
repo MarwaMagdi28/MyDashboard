@@ -13,20 +13,20 @@ resource "tls_private_key" "sskeygen_execution" {
 
 resource "aws_key_pair" "prometheus_key_pair" {
   depends_on = ["tls_private_key.sskeygen_execution"]
-  key_name   = "${aws_key_pair.prometheus_key_pair.id}"
-   connection {
-    user        = "ec2-user"
-    host = self.public_ip
-    private_key = "${tls_private_key.sskeygen_execution.private_key_pem}"
-  }
+  key_name   = "${var.aws_public_key_name}"
+  public_key = "${tls_private_key.sskeygen_execution.public_key_openssh}"
 }
 
 resource "aws_instance" "ubuntu" {
   ami           = "ami-047d7c33f6e7b4bc4" # Ubuntu 18.04 AMI
   instance_type = "t2.micro"
-  key_name      = aws_key_pair.monitoring.key_name
   associate_public_ip_address = true
-  
+   key_name   = "${aws_key_pair.prometheus_key_pair.id}"
+   connection {
+    user        = "ec2-user"
+    host = self.public_ip
+    private_key = "${tls_private_key.sskeygen_execution.private_key_pem}"
+  }
   tags = {
     Name = "ubuntu"
   }
