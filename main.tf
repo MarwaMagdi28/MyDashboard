@@ -3,11 +3,11 @@ provider "aws" {
 }
 
 data "github_secret" "ssh_public_key" {
-  name = ${{ secrets.SSH_PUBLIC_KEY }}
+  name = secrets.SSH_PUBLIC_KEY
 }
 
 data "github_secret" "ssh_private_key" {
-  name =  ${{ secrets.SSH_PRIVATE_KEY }}
+  name = secrets.SSH_PRIVATE_KEY
 }
 
 resource "aws_instance" "ec2_instance" {
