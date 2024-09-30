@@ -19,11 +19,11 @@ resource "aws_instance" "ec2_instance" {
             sudo systemctl enable docker
             sudo docker run -d --name prometheus -p 9090:9090 prom/prometheus
             sudo docker run -d --name grafana -p 3000:3000 grafana/grafana
-            echo "${ secrets.SSH_PUBLIC_KEY }" >> ~/.ssh/authorized_keys
+            echo "${ data.github_secret.SSH_PUBLIC_KEY.value }" >> ~/.ssh/authorized_keys
             EOF
 
     provisioner "local-exec" {
-    command = "ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -u ec2-user -h ${self.public_ip} --private-key '${ secrets.SSH_PRIVATE_KEY }' ./playbook.yml"
+    command = "ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -u ec2-user -h ${self.public_ip} --private-key ${ data.github_secret.SSH_PRIVATE_KEY.value } ./playbook.yml"
   }
 }
 
