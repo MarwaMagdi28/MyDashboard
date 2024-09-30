@@ -1,2 +1,0 @@
-[webservers]
-ec2_instance ansible_host= ${{var.instance_ip}}
