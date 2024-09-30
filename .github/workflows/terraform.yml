@@ -13,6 +13,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+  
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v3
       with:
@@ -26,3 +31,13 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        
+    - name: Set up Ansible
+      uses: ansible/ansible@v2
+      with:
+        ansible-version: 2.11
+
+    - name: Run Ansible playbook
+      run: ansible-playbook playbook.yml
+      env:
+        ANSIBLE_HOST_KEY_CHECKING: false

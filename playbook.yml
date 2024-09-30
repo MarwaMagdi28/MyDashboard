@@ -1,18 +1,32 @@
+# configure-prometheus-grafana.yml
+
 ---
-- hosts: all
-  gather_facts: false
-  vars: 
-    prometheus_version: "2.45.0"
-    grafana_version: "10.0.3-1"
+- name: Configure Prometheus and Grafana
+  hosts: ec2_instance
+  become: yes
+
   tasks:
-    - name: Wait for SSH port to be open
-      wait_for:
-        host: "{{ ansible_host }}"
-        port: 22
-        delay: 15
-        timeout: 300
-   # - include_tasks: prometheus.yml
-   # - include_tasks: grafana.yml
-    - systemd:
-        daemon_reexec: true
-      become: true
+    - name: Install Prometheus
+      yum:
+        name: prometheus
+        state: present
+
+    - name: Configure Prometheus
+      template:
+        src: prometheus.yml.j2
+        dest: /etc/prometheus/prometheus.yml
+
+    - name: Start Prometheus
+      systemd:
+        name: prometheus
+        state: started
+
+    - name: Install Grafana
+      yum:
+        name: grafana
+        state: present
+
+    - name: Start Grafana
+      systemd:
+        name: grafana-server
+        state: started
