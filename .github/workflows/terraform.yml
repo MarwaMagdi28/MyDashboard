@@ -26,4 +26,8 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        
+    
+    - name: Install Ansible
+      run: pip install ansible
+    - name: Run Ansible playbook
+      run: ansible-playbook -i 'hosts' playbook.yml
