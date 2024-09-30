@@ -2,17 +2,23 @@ provider "aws" {
   region = "us-west-1"
 }
 
-resource "aws_key_pair" "monitoring" {
-  key_name   = "monitoring_server_keypair"
-  public_key = file(var.instance_ssh_pub_key)
+variable "aws_public_key_name" {
+  default = "prometheus_aws_rsa"
 }
 
-variable "instance_ssh_pub_key" {
-  type = string
+resource "tls_private_key" "sskeygen_execution" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
 }
 
-variable "instance_ssh_priv_key" {
-  type = string
+resource "aws_key_pair" "prometheus_key_pair" {
+  depends_on = ["tls_private_key.sskeygen_execution"]
+  key_name   = "${aws_key_pair.prometheus_key_pair.id}"
+   connection {
+    user        = "ec2-user"
+    host = self.public_ip
+    private_key = "${tls_private_key.sskeygen_execution.private_key_pem}"
+  }
 }
 
 resource "aws_instance" "ubuntu" {
@@ -36,7 +42,7 @@ resource "aws_instance" "ubuntu" {
             EOF
 
     provisioner "local-exec" {
-    command = "ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -u ec2-user -i '${self.public_ip},' --private-key ${var.instance_ssh_priv_key} ./playbook.yml"
+    command = "ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -u ec2-user -i '${self.public_ip},' --private-key ${tls_private_key.sskeygen_execution.private_key_pem} ./playbook.yml"
   }
 }
 
