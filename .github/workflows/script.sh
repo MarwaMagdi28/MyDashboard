@@ -4,7 +4,7 @@
 INSTANCE_IP=$(terraform output -raw instance_ip)
 
 # Define the hostname you want to use
-HOSTNAME="my-ec2-instance"
+HOSTNAME="ec2-instance"
 
 # Update the hosts file
 echo "$INSTANCE_IP $HOSTNAME" | sudo tee -a /etc/hosts
