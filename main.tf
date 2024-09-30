@@ -2,6 +2,10 @@ provider "aws" {
   region = "us-west-1"
 }
 
+variable "aws_public_key_name" {
+  default = "prometheus_aws_rsa"
+}
+
 resource "tls_private_key" "sskeygen_execution" {
   algorithm = "RSA"
   rsa_bits  = 4096
