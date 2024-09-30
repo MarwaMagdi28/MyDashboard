@@ -2,9 +2,23 @@ provider "aws" {
   region = "us-west-1"
 }
 
+resource "aws_key_pair" "monitoring" {
+  key_name   = "monitoring_server_keypair"
+  public_key = file(var.instance_ssh_pub_key)
+}
+
+variable "instance_ssh_pub_key" {
+  type = string
+}
+
+variable "instance_ssh_priv_key" {
+  type = string
+}
+
 resource "aws_instance" "ubuntu" {
   ami           = "ami-047d7c33f6e7b4bc4" # Ubuntu 18.04 AMI
   instance_type = "t2.micro"
+  key_name      = aws_key_pair.monitoring.key_name
 
   tags = {
     Name = "ubuntu"
@@ -27,8 +41,4 @@ resource "aws_instance" "ubuntu" {
 
 output "instance_ip" {
   value = aws_instance.ubuntu.public_ip
-}
-
-variable "instance_ssh_priv_key" {
-  type = string
 }
