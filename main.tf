@@ -10,6 +10,7 @@ resource "tls_private_key" "sskeygen_execution" {
   algorithm = "RSA"
   rsa_bits  = 4096
 }
+
 resource "aws_key_pair" "prometheus_key_pair" {
   depends_on = ["tls_private_key.sskeygen_execution"]
   key_name   = "${var.aws_public_key_name}"
