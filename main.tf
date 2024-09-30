@@ -19,6 +19,10 @@ resource "aws_instance" "ubuntu" {
             sudo docker run -d --name prometheus -p 9090:9090 prom/prometheus
             sudo docker run -d --name grafana -p 3000:3000 grafana/grafana
             EOF
+
+    provisioner "local-exec" {
+    command = "ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -u ec2-user -i '${self.public_ip},' --private-key ${var.instance_ssh_priv_key} ./playbook.yml"
+  }
 }
 
 output "instance_ip" {
