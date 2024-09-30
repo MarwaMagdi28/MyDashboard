@@ -28,3 +28,7 @@ resource "aws_instance" "ubuntu" {
 output "instance_ip" {
   value = aws_instance.ubuntu.public_ip
 }
+
+variable "instance_ssh_priv_key" {
+  type = string
+}
