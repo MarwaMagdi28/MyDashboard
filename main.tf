@@ -38,7 +38,7 @@ resource "aws_instance" "ec2_instance" {
             EOF
 
     provisioner "local-exec" {
-    command = "ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -u ec2-user -i ${self.public_ip} --private-key ${aws_key_pair.prometheus_key_pair.id}.pem ./playbook.yml"
+    command = "ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -u ec2-user -h ${self.public_ip} --private-key ${aws_key_pair.prometheus_key_pair.id}.pem ./playbook.yml"
   }
 }
 
