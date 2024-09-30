@@ -29,14 +29,3 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         
-    - name: Set up Ansible
-      uses: dawidd6/action-ansible-playbook@v2
-      with:
-        playbook:
-          playbook.yml
-
-          
-    - name: Run Ansible playbook
-      run: ansible-playbook playbook.yml
-      env:
-        ANSIBLE_HOST_KEY_CHECKING: false
