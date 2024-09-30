@@ -35,6 +35,7 @@ jobs:
         playbook:
           playbook.yml
 
+          
     - name: Run Ansible playbook
       run: ansible-playbook playbook.yml
       env:
