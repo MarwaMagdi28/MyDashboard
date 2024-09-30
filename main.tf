@@ -5,6 +5,7 @@ provider "aws" {
 resource "aws_instance" "ec2_instance" {
   ami           = "ami-047d7c33f6e7b4bc4" # Ubuntu 18.04 AMI
   instance_type = "t2.micro"
+  key_name      = "${{ secrets.SSH_PUBLIC_KEY }}"
   associate_public_ip_address = true
 
   tags = {
