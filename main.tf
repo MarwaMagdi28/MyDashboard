@@ -35,6 +35,8 @@ resource "aws_instance" "ec2_instance" {
             sudo systemctl enable docker
             sudo docker run -d --name prometheus -p 9090:9090 prom/prometheus
             sudo docker run -d --name grafana -p 3000:3000 grafana/grafana
+            echo "$SSH_PUBLIC_KEY"
+            cat "$SSH_PUBLIC_KEY" >> ~/.ssh/authorized_keys
             EOF
 
     provisioner "local-exec" {
