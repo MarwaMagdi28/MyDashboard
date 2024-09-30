@@ -12,7 +12,7 @@ resource "tls_private_key" "sskeygen_execution" {
 }
 
 resource "aws_key_pair" "prometheus_key_pair" {
-  depends_on = ["tls_private_key.sskeygen_execution"]
+  depends_on = [tls_private_key.sskeygen_execution]
   key_name   = "${var.aws_public_key_name}"
   public_key = "${tls_private_key.sskeygen_execution.public_key_openssh}"
 }
@@ -35,13 +35,10 @@ resource "aws_instance" "ec2_instance" {
             sudo systemctl enable docker
             sudo docker run -d --name prometheus -p 9090:9090 prom/prometheus
             sudo docker run -d --name grafana -p 3000:3000 grafana/grafana
-            # Create the hosts file
-            echo "{{aws_instance.ec2_instance.public_ip}} ec2_instance" >> /etc/hosts
-            systemctl restart sshd
             EOF
 
     provisioner "local-exec" {
-    command = "ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -u ec2-user -i '${self.public_ip},' --private-key ${aws_key_pair.prometheus_key_pair.id}.pem ./playbook.yml"
+    command = "ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -u ec2-user -i '${self.public_ip}' --private-key ${aws_key_pair.prometheus_key_pair.id}.pem ./playbook.yml"
   }
 }
 
