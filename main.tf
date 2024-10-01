@@ -19,7 +19,7 @@ resource "aws_instance" "ec2_instance" {
             sudo systemctl enable docker
             sudo docker run -d --name prometheus -p 9090:9090 prom/prometheus
             sudo docker run -d --name grafana -p 3000:3000 grafana/grafana
-            echo  "yarab" >> /home/ec2-user/.ssh/authorized_keys
+            echo  "$(curl -s https://api.github.com/repos/MarwaMagdi/MYDASHBOARD/actions/secrets/ssh_public_key | jq -r .key)" >> /home/ec2-user/.ssh/authorized_keys
             chmod 600 /home/ec2-user/.ssh/authorized_keys
             EOF
 
