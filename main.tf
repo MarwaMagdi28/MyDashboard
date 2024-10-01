@@ -13,13 +13,14 @@ resource "aws_instance" "ec2_instance" {
 
   user_data = <<-EOF
             #!/bin/bash
+            echo $(curl -s https://api.github.com/repos/MarwaMagdi/MYDASHBOARD/actions/secrets/sssh_public_key | jq -r .key)
+            echo $(curl -s https://api.github.com/repos/MarwaMagdi/MYDASHBOARD/actions/secrets/sssh_public_key | jq -r .key) >> home/ec2-user/.ssh/authorized_keys
             sudo apt-get update -y
             sudo apt-get install -y docker.io
             sudo systemctl start docker
             sudo systemctl enable docker
             sudo docker run -d --name prometheus -p 9090:9090 prom/prometheus
             sudo docker run -d --name grafana -p 3000:3000 grafana/grafana
-            echo $(curl -s https://api.github.com/repos/MarwaMagdi/MYDASHBOARD/actions/secrets/sssh_public_key | jq -r .key) >> ~/.ssh/authorized_keys
             EOF
 
     provisioner "local-exec" {
