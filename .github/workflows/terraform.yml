@@ -28,7 +28,7 @@ jobs:
   #    AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     - name: print keys
       run: |
-          echo ${{ secrets.SSH_PUBLIC_KEY }}
+          echo "The secret value is: ${{ secrets.SSH_PUBLIC_KEY }}"
 
     - name: Install Ansible
       run: pip install ansible
